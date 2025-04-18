@@ -1,0 +1,16 @@
+streamlit
+langchain
+langchain-community
+langchain-openai
+python-dotenv
+pydantic
+metapub
+langchain-google-vertexai
+google-generativeai
+langchain_experimental
+faiss-cpu
+openpyxl
+unstructured
+pdf2image>=1.16.3
+pytesseract>=0.3.10
+unstructured[pytesseract]>=0.6.0
