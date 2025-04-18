@@ -1,3 +1,5 @@
+# OCR_AGENT = "unstructured.partition.utils.ocr_models.tesseract_ocr.OCRAgentTesseract" 
+
 from langchain_community.document_loaders import UnstructuredPDFLoader
 from langchain.chains.question_answering.chain import load_qa_chain
 from langchain_text_splitters.character import RecursiveCharacterTextSplitter
@@ -15,16 +17,17 @@ from langchain.chains import create_retrieval_chain
 from langchain.chains import LLMChain
 from dotenv import load_dotenv, find_dotenv
 import warnings
+import pytesseract
 warnings.filterwarnings('ignore')
 import os
 from langchain_community.chat_models import AzureChatOpenAI
 
-
+pytesseract.pytesseract.tesseract_cmd ='C:/Program Files/Tesseract-OCR/tesseract.exe'
 
 load_dotenv(find_dotenv())
 os.environ["OCR_AGENT"] = os.getenv("OCR_AGENT")
 
-# folder_path = r"C:\Users\Subhadeep Mondal\Documents\gi_cancer\knowledge_repository"  
+# folder_path = r"C:\Users\Subhadeep Mondal\Documents\aarogya_mitra\knowledge_repository"  
 folder_path = os.getenv('folder_path')
 doc_list = []
 for filename in os.listdir(folder_path):

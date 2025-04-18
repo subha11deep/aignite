@@ -12,7 +12,7 @@ def main():
     col1, col2 = st.columns([1, 3])  
     # Place the logo in the first column 
     with col1: 
-        image = Image.open("../assets/ai_doctor.webp")
+        image = Image.open("../assets/arogya_mitra.jfif")
         resized_image = image.resize((400, 500)) 
         st.image(resized_image)  
     # In the second column, place text explaining the purpose of the app and some example scientific questions that your user might ask. 
