@@ -25,17 +25,36 @@ import os
 embeddings = AzureOpenAIEmbeddings(deployment="embeddings", azure_endpoint=os.getenv("azure_endpoint"), openai_api_key=os.getenv("AZURE_OPENAI_API_KEY"))
 load_dotenv(find_dotenv())
 
-new_vector_store = FAISS.load_local(os.getenv("save_directory"), embeddings, allow_dangerous_deserialization=True
-                                    )
+print(os.getenv("azure_endpoint"))
+print(os.getenv("AZURE_OPENAI_API_KEY"))
+print(os.getenv("save_directory"))
+
+try:
+    new_vector_store = FAISS.load_local(os.getenv("save_directory"), embeddings, allow_dangerous_deserialization=True)
+except Exception as e:
+    print(f"Error loading FAISS vector store: {e}")
+    import traceback
+    print(traceback.format_exc())
+    exit()
+
 question = """Which part of the population is most affected by Stage IV Colorectal Cancer with liver metastases,and why certain interventions do not work for them? """
 docs_db = new_vector_store.similarity_search_with_score(question)
+print(docs_db)
 def genai_query_answer(question, docs_db): 
-    llm = AzureChatOpenAI( azure_endpoint=os.getenv("azure_endpoint") ,
-                          azure_deployment=os.getenv("azure_deployment") ,
-                          api_version=os.getenv("api_version"),
-                          openai_api_key=os.getenv("AZURE_OPENAI_API_KEY"), 
-                          temperature=os.getenv("temperature") 
-    )
+    try:
+        llm = AzureChatOpenAI(
+            azure_endpoint=os.getenv("azure_endpoint"),
+            azure_deployment=os.getenv("azure_deployment"),
+            api_version=os.getenv("api_version"),
+            openai_api_key=os.getenv("AZURE_OPENAI_API_KEY"),
+            temperature=os.getenv("temperature")
+        )
+    except Exception as e:
+        print(f"Error initializing AzureChatOpenAI: {e}")
+        import traceback
+        print(traceback.format_exc())
+        exit()
+    
     input = question 
     context = str(docs_db) 
     prompt_template = """You are a helpful doctor's chatbot assistant,assisting .Based on the user query,first analyse the document 
