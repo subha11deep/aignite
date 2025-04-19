@@ -31,7 +31,7 @@
 
 # using faiss vector db and azure 
 from langchain.agents import Tool, AgentType, initialize_agent 
-from langchain_openai import AzureChatopenAI 
+from langchain_openai import AzureChatOpenAI 
 from langchain_openai import AzureOpenAIEmbeddings 
 from langchain_community.vectorstores.faiss import FAISS 
 from langchain.chains import RetrievalQA 

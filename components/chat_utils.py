@@ -4,7 +4,7 @@ from langchain_core.runnables.base import Runnable
 from langchain_community.chat_message_histories import StreamlitChatMessageHistory
 from langchain_core.prompts import ChatPromptTemplate
 class ChatAgent:
-    def _init (self, prompt: ChatPromptTemplate, llm: Runnable):
+    def __init__(self, prompt: ChatPromptTemplate, llm: Runnable):
         """
         Initialize the ChatAgent.
         Args:
@@ -37,18 +37,18 @@ class ChatAgent:
             self.history.add_ai_message("How can I help you?") 
         for msg in self.history.messages: 
             st.chat_message(msg.type).write(msg.content)
-        def start_conversation(self): 
-            """
-            Start a conversation in the chat interface. 
-            Displays messages, prompts user for input, and handles AI response 
-            """
-            self.display_messages() 
-            user_question = st.chat_input(placeholder="Ask me anything!")
-            if user_question: 
-                st.chat_message("human").write(user_question) 
-                config = {"configurable": {"session_id": "any"}}
-                response = self.chain.invoke({"question": user_question}, config) 
-                print(response) 
-                st.chat_message("ai").write(response['output'])
+    def start_conversation(self): 
+        """
+        Start a conversation in the chat interface. 
+        Displays messages, prompts user for input, and handles AI response 
+        """
+        self.display_messages() 
+        user_question = st.chat_input(placeholder="Ask me anything!")
+        if user_question: 
+            st.chat_message("human").write(user_question) 
+            config = {"configurable": {"session_id": "any"}}
+            response = self.chain.invoke({"question": user_question}, config) 
+            print(response) 
+            st.chat_message("ai").write(response['output'])
                                             
 

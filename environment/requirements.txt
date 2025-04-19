@@ -23,3 +23,5 @@ unstructured_inference
 Pillow
 pdf2image
 unstructured_pytesseract
+keras
+tensorflow

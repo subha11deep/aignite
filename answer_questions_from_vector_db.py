@@ -1,6 +1,6 @@
 from langchain_community.document_loaders import UnstructuredExcelLoader
 from langchain.chains.question_answering.chain import load_qa_chain
-from langchain_text_splitters.character import RecursivecharacterTextSplitter
+from langchain_text_splitters.character import RecursiveCharacterTextSplitter
 from langchain.llms import AzureOpenAI
 import os
 import pandas as pd
@@ -16,12 +16,13 @@ from langchain.chat_models import AzureChatOpenAI
 from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain.chains import create_retrieval_chain
 from langchain.chains import LLMChain
-from keras.layers import Embedding
+# from keras.layers import Embedding
+
 from dotenv import load_dotenv,find_dotenv 
 import warnings
 warnings.filterwarnings('ignore')
 import os
-embeddings = AzureOpenAIEmbeddings(deployment='embeddings', azure_endpoint=os.getenv("azure_endpoint"), openai_api_key=os.getenv("AZURE_OPENAI_API_KEY"))
+embeddings = AzureOpenAIEmbeddings(deployment="embeddings", azure_endpoint=os.getenv("azure_endpoint"), openai_api_key=os.getenv("AZURE_OPENAI_API_KEY"))
 load_dotenv(find_dotenv())
 
 new_vector_store = FAISS.load_local(os.getenv("save_directory"), embeddings, allow_dangerous_deserialization=True
@@ -46,8 +47,15 @@ def genai_query_answer(question, docs_db):
     document: {context}"""
     prompt = PromptTemplate(input_variables=['input','context'],template=prompt_template) 
     llm_chain=LLMChain(llm=llm,prompt=prompt) 
-    response=llm_chain.invoke({"input": input, "context": context}) 
-    return response['text'] 
+    try:
+        response=llm_chain.invoke({'input': input, 'context': context}) 
+        return response['text'] 
+    except Exception as e:
+        print(f"Error: {e}") 
+        import traceback
+        print(traceback.format_exc())
+        return None
  
 test_response=genai_query_answer(question, docs_db) 
-print(test_response.replace('\n', '\n\t')) 
+# print(test_response.replace('\n', '\n\t')) 
+print(test_response)
