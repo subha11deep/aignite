@@ -1,5 +1,6 @@
 import streamlit as st
 from answer_questions_from_vector_db import genai_query_answer  # Relative import
+from accuracy_metrics import calculate_accuracy
 #from ..AI.create_vector_db_from_data import new_vector_store  # Relative import
 
 def health_policy_page():
@@ -43,10 +44,23 @@ def health_policy_page():
                 if backend_response:
                     # Add assistant response to chat history
                     st.session_state.health_policy_messages.append({"role": "assistant", "content": backend_response})
+                    bleu, meteor, rouge1, rouge2, rougeL = calculate_accuracy(user_input,backend_response)
+                    st.session_state.health_policy_messages.append({"role": "assistant", "content": backend_response})
+                    st.markdown("### Accuracy Metrics")
+                    col1, col2, col3 = st.columns(3)
+                    with col1:
+                        st.metric(label="BLEU Score", value=f"{bleu:.2f}")
+                        st.metric(label="ROUGE-1", value=f"{rouge1:.2f}")
+                    with col2:
+                        st.metric(label="METEOR Score", value=f"{meteor:.2f}")
+                        st.metric(label="ROUGE-2", value=f"{rouge2:.2f}")
+                    with col3:
+                        st.metric(label="ROUGE-L", value=f"{rougeL:.2f}")
+
                 else:
                     st.error("No response received from the assistant.")
                 # Add assistant response to chat history
-                st.session_state.health_policy_messages.append({"role": "assistant", "content": backend_response})
+                
             except Exception as e:
                 st.error(f"An error occurred: {str(e)}")
 
